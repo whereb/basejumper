@@ -15,6 +15,7 @@ describe WebContactsController do
       @contact.stubs(:valid?).returns(true)
       WebContact.stubs(:new).returns(@contact)
       Notifier.stubs(:deliver_contact)
+      Notifier.stubs(:deliver_thank_you)
     end
     
     describe "with invalid contact info" do
@@ -26,8 +27,13 @@ describe WebContactsController do
     end
     
     describe "with valid contact info" do
-      it "should deliver email" do
+      it "should deliver a contact email" do
         Notifier.expects(:deliver_contact)
+        post :create
+      end
+
+      it "should deliver thank you email" do
+        Notifier.expects(:deliver_thank_you)
         post :create
       end
     
